@@ -6,5 +6,5 @@ dependencies {
     implementation 'com.squareup:javapoet:1.11.1'
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
