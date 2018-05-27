@@ -18,7 +18,6 @@ import javax.annotation.processing.Filer;
 import javax.annotation.processing.Messager;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
@@ -41,23 +40,19 @@ public class Processor extends AbstractProcessor {
         elementUtils = processingEnv.getElementUtils();
     }
 
-    public static TypeElement findEnclosingTypeElement(Element e) {
-        while (e != null && !(e instanceof TypeElement)) {
-            e = e.getEnclosingElement();
-        }
-        return TypeElement.class.cast(e);
-    }
-
     /*
      * annotations: list of unique annotations that are getting processed
      */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         if (!roundEnv.processingOver()) {
+
+            // find all the classes that uses the supported annotations
             Set<TypeElement> typeElements = ProcessingUtils.getTypeElementsToProcess(
                     roundEnv.getRootElements(),
                     annotations);
 
+            // for each such class create a wrapper class for binding
             for (TypeElement typeElement : typeElements) {
                 String packageName = elementUtils.getPackageOf(typeElement).getQualifiedName().toString();
                 String typeName = typeElement.getSimpleName().toString();
@@ -66,10 +61,12 @@ public class Processor extends AbstractProcessor {
                 ClassName generatedClassName = ClassName
                         .get(packageName, NameStore.getGeneratedClassName(typeName));
 
+                // define the wrapper class
                 TypeSpec.Builder classBuilder = TypeSpec.classBuilder(generatedClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .addAnnotation(Keep.class);
 
+                // add constructor
                 classBuilder.addMethod(MethodSpec.constructorBuilder()
                         .addModifiers(Modifier.PUBLIC)
                         .addParameter(className, NameStore.Variable.ANDROID_ACTIVITY)
@@ -81,6 +78,7 @@ public class Processor extends AbstractProcessor {
                                 NameStore.Variable.ANDROID_ACTIVITY)
                         .build());
 
+                // add method that maps the views with id
                 MethodSpec.Builder bindViewsMethodBuilder = MethodSpec
                         .methodBuilder(NameStore.Method.BIND_VIEWS)
                         .addModifiers(Modifier.PRIVATE)
@@ -100,6 +98,7 @@ public class Processor extends AbstractProcessor {
                 }
                 classBuilder.addMethod(bindViewsMethodBuilder.build());
 
+                // add method that attaches the onClickListeners
                 ClassName androidOnClickListenerClassName = ClassName.get(
                         NameStore.Package.ANDROID_VIEW,
                         NameStore.Class.ANDROID_VIEW,
@@ -138,6 +137,7 @@ public class Processor extends AbstractProcessor {
                 }
                 classBuilder.addMethod(bindOnClicksMethodBuilder.build());
 
+                // write the defines class to a java file
                 try {
                     JavaFile.builder(packageName,
                             classBuilder.build())
