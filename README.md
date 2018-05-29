@@ -1,4 +1,4 @@
-# Example Project: Android Annotation Processing Tutorial.
+# Android Annotation Processing Tutorial: Example Project
 
 > A complete library implementation
 
