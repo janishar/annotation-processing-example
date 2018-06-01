@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Binding {
 
-    public Binding() {
+    private Binding() {
         // not to be instantiated in public
     }
 
