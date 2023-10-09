@@ -4,6 +4,12 @@
 
 Annotation processing has become one of the most important language features in the modern Java programming. Java supports annotation processing from the release of Java 5 but its full potential has been realized in the recent years. Annotation processing in simple words is used to generate files during compilation.
 
+# About The Author
+You can connect with me here:
+* [Janishar Ali](https://janisharali.com)
+* [Twitter](https://twitter.com/janisharali)
+* [YouTube Channel](https://www.youtube.com/@unusualcode)
+
 ### The links to the tutorials:
 1. [Part 1 : A practical approach](https://janisharali.com/blog/android-annotation-processing-tutorial-part-1-a-practical-approach)
 2. [Part 2: The project structure](https://janisharali.com/blog/android-annotation-processing-tutorial-part-2-the-project-structure)
@@ -17,7 +23,7 @@ This is a project aimed to help bootstrap new Android library for annotation pro
 
 ### License
 ```
-   Copyright (C) 2022 JANISHAR ALI ANWAR
+   Copyright (C) 2023 JANISHAR ALI ANWAR
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
